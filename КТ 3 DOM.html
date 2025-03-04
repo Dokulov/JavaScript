@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог товаров</title>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.fontFamily = 'Arial, sans-serif';
+            document.body.style.margin = '20px';
+            document.body.style.backgroundColor = "#d1d1d1";
+
+            const h1 = document.createElement('h1');
+            h1.textContent = 'Каталог товаров';
+            document.body.appendChild(h1);
+
+            const catalog = document.createElement('ul');
+            catalog.id = 'catalog';
+            catalog.style.listStyleType = 'none';
+            catalog.style.padding = '0';
+            catalog.style.margin = '0';
+
+            function createMenuItem(text, children = []) {
+                const li = document.createElement('li');
+                li.style.margin = '5px 0';
+
+                const a = document.createElement('a');
+                a.href = '#';
+                a.textContent = text;
+                a.style.textDecoration = 'none';
+                a.style.color = '#000';
+                a.style.cursor = 'pointer';
+                li.appendChild(a);
+
+                if (children.length > 0) {
+                    li.classList.add('has-children');
+                    
+                    const arrow = document.createElement('span');
+                    arrow.textContent = '▼';
+                    arrow.style.fontSize = '0.8em';
+                    li.appendChild(arrow);
+
+                    const ul = document.createElement('ul');
+                    ul.classList.add('children');
+                    ul.style.display = 'none';
+                    ul.style.marginLeft = '20px';
+                ul.style.listStyleType = 'none';
+                ul.style.padding = '0';
+
+                    children.forEach(child => ul.appendChild(child));
+                    li.appendChild(ul);
+                }
+
+                return li;
+            }
+
+            const books = createMenuItem('Книги', [
+                createMenuItem('Отечественные', [
+                    createMenuItem('Детективы'),
+                    createMenuItem('Научная фантастика'),
+                    createMenuItem('Аниме')
+                ]),
+                createMenuItem('Зарубежные', [
+                    createMenuItem('Детективы'),
+                    createMenuItem('Научная фантастика'),
+                    createMenuItem('Аниме')
+                ])
+            ]);
+
+            const dvds = createMenuItem('DVD', [
+                createMenuItem('Отечественные', [
+                    createMenuItem('Детективы'),
+                    createMenuItem('Научная фантастика'),
+                    createMenuItem('Исторические')
+                ]),
+                createMenuItem('Зарубежные', [
+                    createMenuItem('Детективы'),
+                    createMenuItem('Научная фантастика'),
+                    createMenuItem('Аниме')
+                ])
+            ]);
+
+            catalog.appendChild(books);
+            catalog.appendChild(dvds);
+
+            document.body.appendChild(catalog);
+
+            // Обработчик кликов для раскрытия/скрытия подменю
+            catalog.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                    const parentLi = event.target.parentElement;
+                    if (parentLi.classList.contains('has-children')) {
+                        event.preventDefault();
+                        parentLi.classList.toggle('active');
+
+                        const childrenUl = parentLi.querySelector('.children');
+                        if (childrenUl) {
+                            if (parentLi.classList.contains('active')) {
+                                childrenUl.style.display = 'block';
+                            } else {
+                                childrenUl.style.display = 'none';
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
